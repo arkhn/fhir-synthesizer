@@ -41,5 +41,5 @@ def hapi_to_json(only_anon: bool = True, all_pages: bool = False):
                 k: v for k, v in [(link["relation"], link["url"]) for link in result["link"]]
             }
 
-        with open(os.path.join(DATA_PATH, f"{file_name}.json"), "w", encoding="utf-8") as f:
+        with open(os.path.join(DATA_PATH, f"{file_name}_all.json"), "w", encoding="utf-8") as f:
             json.dump(pages, f, ensure_ascii=False)
