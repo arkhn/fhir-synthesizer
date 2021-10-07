@@ -29,3 +29,7 @@ ANON_REQUESTS = {
     # spécialisées planifiées
     "consultations_pedicure": "/Encounter?class=C0850352&",  # Toutes les consultations de pédicure
 }
+
+NOT_ANON_RESOURCE_TYPES = list(NOT_ANON_REQUESTS.keys())
+ANON_RESOURCES_TYPES = list(ANON_REQUESTS.keys())
+ALL_RESOURCE_TYPES = NOT_ANON_RESOURCE_TYPES + NOT_ANON_RESOURCE_TYPES
