@@ -30,16 +30,15 @@ def hapi_to_json(only_anon: bool = True, all_pages: bool = False):
                 json.dump(result, f, ensure_ascii=False)
             continue
 
-        pages = [result]
         relations = {k: v for k, v in [(link["relation"], link["url"]) for link in result["link"]]}
         while "next" in relations.keys():
             next_url = relations["next"]
             r = requests.get(next_url)
-            result = r.json()
-            pages.append(result)
+            new_result = r.json()
+            result["entry"] += new_result["entry"]
             relations = {
-                k: v for k, v in [(link["relation"], link["url"]) for link in result["link"]]
+                k: v for k, v in [(link["relation"], link["url"]) for link in new_result["link"]]
             }
 
         with open(os.path.join(DATA_PATH, f"{file_name}_all.json"), "w", encoding="utf-8") as f:
-            json.dump(pages, f, ensure_ascii=False)
+            json.dump(result, f, ensure_ascii=False)
