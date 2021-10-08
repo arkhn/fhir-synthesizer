@@ -8,4 +8,6 @@ from .metadata import (
     DATA_PATH,
     NOT_ANON_REQUESTS,
     NOT_ANON_RESOURCE_TYPES,
+    SPECS_TO_DELETE,
+    SPECS_TO_SAMPLE,
 )
