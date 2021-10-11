@@ -36,86 +36,103 @@ NOT_ANON_RESOURCE_TYPES = list(NOT_ANON_REQUESTS.keys())
 ANON_RESOURCES_TYPES = list(ANON_REQUESTS.keys())
 ALL_RESOURCE_TYPES = NOT_ANON_RESOURCE_TYPES + NOT_ANON_RESOURCE_TYPES
 
-# {resource_name : [(spec, n_flatten), ...]}
-SPECS_TO_SAMPLE = {
-    "patients_actifs": [(("entry", ["resource.managingOrganization"]), 0)],
+# {resource_name : [(path, spec, n_flatten), ...]}
+PATHS_TO_SAMPLE = {
+    "patients_actifs": [
+        ("entry.{}.resource.managingOrganization", ("entry", ["resource.managingOrganization"]), 0)
+    ],
     "activités_planifiees": [
-        (("entry", ["resource.status"]), 0),
-        (("entry", ["resource.description"]), 0),
-        (("entry", ["resource.start"]), 0),
-        (("entry", ["resource.end"]), 0),
+        ("entry.{}.resource.status", ("entry", ["resource.status"]), 0),
+        ("entry.{}.resource.description", ("entry", ["resource.description"]), 0),
+        ("entry.{}.resource.start", ("entry", ["resource.start"]), 0),
+        ("entry.{}.resource.end", ("entry", ["resource.end"]), 0),
     ],  # Participants ?
     "soins_planifies": [
-        (("entry", ["resource.code"]), 0),
-        (("entry", ["resource.subject"]), 0),
-        (("entry", ["resource.occurrenceTiming"]), 0),
-        (("entry", ["resource.performerType"]), 0),
+        ("entry.{}.resource.code", ("entry", ["resource.code"]), 0),
+        ("entry.{}.resource.subject", ("entry", ["resource.subject"]), 0),
+        ("entry.{}.resource.occurrenceTiming", ("entry", ["resource.occurrenceTiming"]), 0),
+        ("entry.{}.resource.performerType", ("entry", ["resource.performerType"]), 0),
     ],
     "vacs_hospit_sejours": [
-        (("entry", ["resource.status"]), 0),
-        (("entry", ["resource.class"]), 0),
-        (("entry", ["resource.subject"]), 0),
-        (("entry", ["resource.period"]), 0),
-        (("entry", [Coalesce("resource.serviceProvider", default=None)]), 0),
-        (("entry", [Coalesce("resource.priority", default=None)]), 0),
+        ("entry.{}.resource.status", ("entry", ["resource.status"]), 0),
+        ("entry.{}.resource.class", ("entry", ["resource.class"]), 0),
+        ("entry.{}.resource.subject", ("entry", ["resource.subject"]), 0),
+        ("entry.{}.resource.period", ("entry", ["resource.period"]), 0),
+        (
+            "entry.{}.resource.serviceProvider",
+            ("entry", [Coalesce("resource.serviceProvider", default=None)]),
+            0,
+        ),
+        ("entry.{}.resource.priority", ("entry", [Coalesce("resource.priority", default=None)]), 0),
     ],
     "hospitalisations": [
-        (("entry", ["resource.status"]), 0),
-        (("entry", ["resource.subject"]), 0),
-        (("entry", ["resource.period"]), 0),
-        (("entry", [Coalesce("resource.serviceProvider", default=None)]), 0),
+        ("entry.{}.resource.status", ("entry", ["resource.status"]), 0),
+        ("entry.{}.resource.subject", ("entry", ["resource.subject"]), 0),
+        ("entry.{}.resource.period", ("entry", ["resource.period"]), 0),
+        (
+            "entry.{}.resource.serviceProvider",
+            ("entry", [Coalesce("resource.serviceProvider", default=None)]),
+            0,
+        ),
     ],
     "sejours": [
-        (("entry", ["resource.status"]), 0),
-        (("entry", ["resource.subject"]), 0),
-        (("entry", ["resource.period"]), 0),
-        (("entry", [Coalesce("resource.serviceProvider", default=None)]), 0),
-        (("entry", ["resource.location"]), 1),
+        ("entry.{}.resource.status", ("entry", ["resource.status"]), 0),
+        ("entry.{}.resource.subject", ("entry", ["resource.subject"]), 0),
+        ("entry.{}.resource.period", ("entry", ["resource.period"]), 0),
+        (
+            "entry.{}.resource.serviceProvider",
+            ("entry", [Coalesce("resource.serviceProvider", default=None)]),
+            0,
+        ),
+        ("entry.{}.resource.location", ("entry", ["resource.location"]), 1),
     ],
     "sejours_actifs": [
-        (("entry", ["resource.status"]), 0),
-        (("entry", ["resource.subject"]), 0),
-        (("entry", ["resource.period"]), 0),
-        (("entry", [Coalesce("resource.serviceProvider", default=None)]), 0),
-        (("entry", ["resource.location"]), 1),
+        ("entry.{}.resource.status", ("entry", ["resource.status"]), 0),
+        ("entry.{}.resource.subject", ("entry", ["resource.subject"]), 0),
+        ("entry.{}.resource.period", ("entry", ["resource.period"]), 0),
+        (
+            "entry.{}.resource.serviceProvider",
+            ("entry", [Coalesce("resource.serviceProvider", default=None)]),
+            0,
+        ),
+        ("entry.{}.resource.location", ("entry", ["resource.location"]), 1),
     ],
     "vacances": [
-        (("entry", ["resource.status"]), 0),
-        (("entry", ["resource.subject"]), 0),
-        (("entry", ["resource.period"]), 0),
+        ("entry.{}.resource.status", ("entry", ["resource.status"]), 0),
+        ("entry.{}.resource.subject", ("entry", ["resource.subject"]), 0),
+        ("entry.{}.resource.period", ("entry", ["resource.period"]), 0),
     ],
     "consultations_specialisees": [
-        (("entry", ["resource.status"]), 0),
-        (("entry", [Coalesce("resource.type", default=None)]), 1),
-        (("entry", ["resource.subject"]), 0),
-        (("entry", ["resource.period"]), 0),
-        (("entry", ["resource.priority"]), 0),
+        ("entry.{}.resource.status", ("entry", ["resource.status"]), 0),
+        ("entry.{}.resource.type", ("entry", [Coalesce("resource.type", default=None)]), 1),
+        ("entry.{}.resource.subject", ("entry", ["resource.subject"]), 0),
+        ("entry.{}.resource.period", ("entry", ["resource.period"]), 0),
+        ("entry.{}.resource.priority", ("entry", ["resource.priority"]), 0),
     ],
     "consultations_pedicure": [
-        (("entry", ["resource.status"]), 0),
-        (("entry", ["resource.subject"]), 0),
-        (("entry", ["resource.period"]), 0),
+        ("entry.{}.resource.status", ("entry", ["resource.status"]), 0),
+        ("entry.{}.resource.subject", ("entry", ["resource.subject"]), 0),
+        ("entry.{}.resource.period", ("entry", ["resource.period"]), 0),
     ],
 }
 
 # {resource_name : [spec, ...]}
-SPECS_TO_DELETE = {
+PATHS_TO_DELETE = {
     "patients_actifs": [
-        ("entry", ["resource.birthDate"]),
-        ("entry", [("resource.name", ["text"])]),
-        ("entry", [("resource.name", ["family"])]),
-        ("entry", [("resource.name", ["given"])]),
+        "entry.{}.resource.birthDate",
+        "entry.{}.resource.name",
+        "entry.{}.resource.text",
     ],
     "activités_planifiees": [],
-    "soins_planifies": [("entry", ["resource.note"])],
-    "vacs_hospit_sejours": [("entry", [Coalesce("resource.type", default=None)])],
-    "hospitalisations": [("entry", [Coalesce("resource.type", default=None)])],
+    "soins_planifies": ["entry.{}.resource.note"],
+    "vacs_hospit_sejours": ["entry.{}.resource.type"],
+    "hospitalisations": ["entry.{}.resource.type"],
     "sejours": [],
     "sejours_actifs": [],
-    "vacances": [("entry", [Coalesce("resource.type", default=None)])],
+    "vacances": ["entry.{}.resource.type"],
     "consultations_specialisees": [
-        ("entry", [Coalesce("resource.reasonCode", default=None)]),
-        ("entry", ["resource.hospitalization"]),
+        "entry.{}.resource.reasonCode",
+        "entry.{}.resource.hospitalization",
     ],
-    "consultations_pedicure": [("entry", [Coalesce("resource.reasonCode", default=None)])],
+    "consultations_pedicure": ["entry.{}.resource.reasonCode"],
 }

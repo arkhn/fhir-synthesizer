@@ -7,6 +7,7 @@
 
 # Data stuff
 data/
+output_data/
 
 ### GitHub's .gitignore Python template ###
 # Byte-compiled / optimized / DLL files
