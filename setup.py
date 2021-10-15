@@ -7,14 +7,14 @@ with open("requirements.txt") as f:
     requirements = f.read().splitlines()
 
 setup(
-    name="synthetic-data",
+    name="okapy",
     version="0.1.0",
     author="Arkhn's Data Team",
     author_email="data@arkhn.com",
-    description="",
+    description="Anonymization tool for the Oqapi project with the Croix-Rouge.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/arkhn/synthetic-data",
+    url="https://github.com/arkhn/okapy",
     packages=find_packages(),
     install_requires=requirements,
     classifiers=[
