@@ -4,13 +4,14 @@ import os
 import numpy as np
 from glom import PathAccessError, assign, delete, glom
 
-from .getter import get_all_values
-from .metadata import DATA_PATH, PATHS_DEFAULT_VALUE, PATHS_ID_REF, PATHS_TO_DELETE, PATHS_TO_SAMPLE
+from .metadata import PATHS_DEFAULT_VALUE, PATHS_ID_REF, PATHS_TO_DELETE, PATHS_TO_SAMPLE
+from .tools.paths import DATA_PATH
+from .tools.utils import glom_getter
 
 
-def create_fake_data(initial_data: dict, id_suffix: str):
-    """Create and save synthetic data created from `initial_data`, with some arguments removed and
-    others sampled from `initial_data`.
+def generate(initial_data: dict, id_suffix: str):
+    """Generate synthetic data created from `initial_data`, with some arguments removed
+    and others sampled from `initial_data`. Save the results in JSON files.
 
     Args:
         initial_data: Real data, from which we want to sample fake information.
@@ -27,8 +28,10 @@ def create_fake_data(initial_data: dict, id_suffix: str):
         values_to_sample = {}
         if resource_name in PATHS_TO_SAMPLE:
             for path, spec, n_flatten in PATHS_TO_SAMPLE[resource_name]:
-                values_to_sample[path] = get_all_values(
-                    data=resource, spec=spec, n_flatten=n_flatten
+                values_to_sample[path] = glom_getter(
+                    data=resource,
+                    spec=spec,
+                    n_flatten=n_flatten,
                 )
 
         # First, gather manually participants and start/end for appointments
