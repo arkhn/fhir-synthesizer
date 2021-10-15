@@ -1,8 +1,14 @@
 import os
 
 import requests
+from dotenv import load_dotenv
 
 from .metadata import DATA_PATH, REQUESTS
+
+load_dotenv()  # Take environment variables from .env
+hapi_fhir_url = os.getenv("HAPI_FHIR_URL")
+if hapi_fhir_url is None:
+    raise ValueError("Missing environment variable for 'HAPI_FHIR_URL'.")
 
 
 def fetch_hapi(all_pages: bool = False):
@@ -19,7 +25,7 @@ def fetch_hapi(all_pages: bool = False):
     data = dict()
     for resource_name, request in REQUESTS.items():
         # A connection to the server is needed to access the data
-        r = requests.get(f"http://10.203.0.30/hapi/fhir{request}_format=json")
+        r = requests.get(f"{hapi_fhir_url}/{request}_format=json")
         result = r.json()
 
         if not all_pages:
