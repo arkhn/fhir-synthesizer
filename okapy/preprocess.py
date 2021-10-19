@@ -21,7 +21,7 @@ def preprocess_sampling_data(
         All the sampling data needed for `resource_bundle`.
     """
     if verbose:
-        print(f"Preprocessing resources '{resource_name}'...")
+        print("Preprocessing...")
 
     resource = {"entry": resource_bundle["entry"]}
     resource_sampling_data: dict[str, SamplingData] = {}
