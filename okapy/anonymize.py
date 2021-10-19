@@ -27,7 +27,7 @@ def anonymize(
         Input resource, modified in-place to make it anonymous.
     """
     if verbose:
-        print(f"Anonymizing resources `{resource_name}`...")
+        print(f"Anonymizing resources '{resource_name}'...")
 
     if resource_name == "activites_planifiees":
         practitioners = resource_sampling_data.pop("practitioners")

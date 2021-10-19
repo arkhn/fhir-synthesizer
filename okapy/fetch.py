@@ -30,7 +30,7 @@ def fetch(
         Requested resource bundle.
     """
     if verbose:
-        print(f"Fetching resources `{resource_name}`...")
+        print(f"Fetching resources '{resource_name}'...")
 
     request = REQUESTS[resource_name]
 
