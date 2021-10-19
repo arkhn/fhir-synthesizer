@@ -8,7 +8,7 @@ META = (
 ID = "entry.{}.resource.id"
 URL = "entry.{}.fullUrl"
 
-RESOURCE_NAMES = {
+RESOURCE_NAMES = [
     "ehpads",
     "services",
     "soins",
@@ -23,7 +23,7 @@ RESOURCE_NAMES = {
     "consultations_specialisees",
     "consultations_pedicure",
     "practitioner",
-}
+]
 
 REQUESTS = {
     "ehpads": "Organization?type=C0028688&",  # Requêter tous les ehpads
@@ -50,8 +50,8 @@ PATHS_TO_SAMPLE = {
     "activites_planifiees": [
         ("entry.{}.resource.status", ("entry", ["resource.status"]), 0),
         ("entry.{}.resource.description", ("entry", ["resource.description"]), 0),
-        ("entry.{}.resource.start", ("entry", ["resource.start"]), 0),
-        ("entry.{}.resource.end", ("entry", ["resource.end"]), 0),
+        # ("entry.{}.resource.start", ("entry", ["resource.start"]), 0),
+        # ("entry.{}.resource.end", ("entry", ["resource.end"]), 0),
     ],
     "soins_planifies": [
         ("entry.{}.resource.code", ("entry", ["resource.code"]), 0),
