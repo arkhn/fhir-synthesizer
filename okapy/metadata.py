@@ -8,6 +8,23 @@ META = (
 ID = "entry.{}.resource.id"
 URL = "entry.{}.fullUrl"
 
+RESOURCE_NAMES = {
+    "ehpads",
+    "services",
+    "soins",
+    "animations",
+    "chambres",
+    "patients_actifs",
+    "activites_planifiees",
+    "soins_planifies",
+    "hospitalisations",
+    "sejours",
+    "vacances",
+    "consultations_specialisees",
+    "consultations_pedicure",
+    "practitioner",
+}
+
 REQUESTS = {
     "ehpads": "Organization?type=C0028688&",  # Requêter tous les ehpads
     "services": "Organization?type=C4069076&partof.identifier=140016957&",  # Requêter tous les
