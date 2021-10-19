@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from typing import Optional
 
 from .anonymize import anonymize
@@ -29,6 +30,7 @@ def anonymization_pipeline(
     n_resource_names = len(resource_names)
     for i, resource_name in enumerate(resource_names):
 
+        t0 = time.time()
         if verbose:
             print(f"Resources {i + 1}/{n_resource_names}: '{resource_name}'...")
 
@@ -57,6 +59,10 @@ def anonymization_pipeline(
             os.makedirs(output_dir, exist_ok=True)
             with open(os.path.join(output_dir, f"{resource_name}.json"), "w") as f:
                 json.dump(resource_bundle, f, ensure_ascii=False)
+
+        t1 = time.time()
+        if verbose:
+            print(f"Resources '{resource_name}' done in {round(t1-t0, 3)}s.\n")
 
 
 if __name__ == "__main__":
