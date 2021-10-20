@@ -24,6 +24,7 @@ def preprocess_sampling_data(
         print("Preprocessing...")
 
     resource = {"entry": resource_bundle["entry"]}
+    n_entries = len(resource["entry"])
     resource_sampling_data: dict[str, SamplingData] = {}
 
     # General case
@@ -71,11 +72,14 @@ def preprocess_sampling_data(
             # Start / end
             starts_ends.append((entry["resource"]["start"], entry["resource"]["end"]))
 
-        resource_sampling_data["practitioners"] = to_sampling_data(practitioners)
+        resource_sampling_data["practitioners"] = to_sampling_data(practitioners, unique=True)
         resource_sampling_data["n_practitioners"] = to_sampling_data(n_practitioners)
-        resource_sampling_data["patients"] = to_sampling_data(patients)
+        resource_sampling_data["patients"] = to_sampling_data(patients, unique=True)
         resource_sampling_data["n_patients"] = to_sampling_data(n_patients)
         resource_sampling_data["starts_ends"] = to_sampling_data(starts_ends)
+
+    for _, sampling_data in resource_sampling_data.items():
+        sampling_data.compute_samples(size=n_entries)
 
     if verbose:
         for title, sampling_data in resource_sampling_data.items():
