@@ -73,9 +73,9 @@ def anonymize(
         # In the case of an appointment, handle participants and periods manually
         if resource_name == "activites_planifiees":
             n_patient = n_patients.sample()
-            fake_patients = patients.sample(size=n_patient, replace=False)
+            fake_patients = patients.sample(size=n_patient)
             n_practitioner = n_practitioners.sample()
-            fake_practitioners = practitioners.sample(size=n_practitioner, replace=False)
+            fake_practitioners = practitioners.sample(size=n_practitioner)
             fake_participants = list(fake_patients) + list(fake_practitioners)
             assign(resource, f"entry.{i}.resource.participant", fake_participants)
 

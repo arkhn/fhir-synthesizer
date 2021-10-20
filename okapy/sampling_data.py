@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -16,6 +16,10 @@ class SamplingData(ABC):
     """
 
     @abstractmethod
+    def compute_samples(self, *args, **kwargs):
+        pass
+
+    @abstractmethod
     def sample(self, *args, **kwargs) -> Any:
         pass
 
@@ -26,14 +30,38 @@ class SamplingData(ABC):
 
 class CategoricalSamplingData(SamplingData):
     """Categorical sampling data is data that is not considered as continuous, and can therefore
-    be sampled with a `np.random.choice` call.
+    be sampled with a simple `np.random.choice` call.
     """
 
     def __init__(self, values: list[Any]):
         self.values = values
+        self.samples: list[Any] = []
 
-    def sample(self, size: Optional[int] = None, replace: bool = True, *args, **kwargs) -> Any:
-        return np.random.choice(self.values, size=size, replace=replace)
+    def compute_samples(self, size: int = 100, *args, **kwargs):
+        samples = list(np.random.choice(self.values, size=size))
+        self.samples.extend(samples)
+
+    def sample(self, *args, **kwargs) -> Any:
+        try:
+            return self.samples.pop()
+        except IndexError:
+            self.compute_samples()
+            return self.samples.pop()
+
+    def display_info(self, title: str):
+        print(f"{title} ({len(self.values)}): {set([str(value) for value in self.values][:5])}")
+
+
+class UniqueCategoricalSamplingData(CategoricalSamplingData):
+    """Unique categorical sampling data is a subset of categorical sampling data where the data
+    is considered as unique and can therefore not be sampled with replacement.
+    """
+
+    def compute_samples(self, *args, **kwargs):
+        pass
+
+    def sample(self, size: int, *args, **kwargs) -> Any:  # type: ignore
+        return list(np.random.choice(self.values, size=size, replace=False))
 
     def display_info(self, title: str):
         print(f"{title} ({len(self.values)}): {set([str(value) for value in self.values][:5])}")
@@ -46,6 +74,7 @@ class ContinuousSamplingData(SamplingData):
         self.values = values
         self.min_value = min(values)
         self.max_value = max(values)
+        self.samples: list[Any] = []
 
         if self.min_value != self.max_value:  # General case
             self.x = np.arange(0, self.max_value)
@@ -64,11 +93,21 @@ class ContinuousSamplingData(SamplingData):
             self.x = None
             self.pdf = None
 
-    def sample(self, *args, **kwargs) -> int:
+    def compute_samples(self, size: int = 100, *args, **kwargs):
         if self.pdf is not None:  # General case
-            return int(np.random.choice(self.x, p=self.pdf / np.sum(self.pdf)))
+            samples = list(np.random.choice(self.x, p=self.pdf / np.sum(self.pdf), size=size))
         else:  # Case where there is only one value
-            return self.values[0]
+            samples = [self.values[0] for _ in range(size)]
+        self.samples.extend(samples)
+
+    def sample(self, *args, **kwargs) -> Any:
+        try:
+            sample = self.samples.pop()
+        except IndexError:
+            self.compute_samples()
+            sample = self.samples.pop()
+
+        return int(sample)
 
     def display_info(self, title: str):
         if self.pdf is not None:  # General case
@@ -110,6 +149,10 @@ class DtSamplingData(SamplingData):
         minutes = [dt.time().hour * 60 + dt.time().minute for dt in dts]
         self.minutes_sampling_data = ContinuousSamplingData(minutes)
 
+    def compute_samples(self, size: int = 100, *args, **kwargs):
+        self.days_sampling_data.compute_samples(size=size)
+        self.minutes_sampling_data.compute_samples(size=size)
+
     def sample_dt(self) -> datetime:
         day = self.days_sampling_data.sample()
         minute = self.minutes_sampling_data.sample()
@@ -122,7 +165,6 @@ class DtSamplingData(SamplingData):
             tzinfo=self.tz_info,
         )
         dt = min_dt + timedelta(days=day, minutes=minute)
-
         return dt
 
     def sample(self, *args, **kwargs) -> str:
@@ -148,15 +190,18 @@ class DtDurationSamplingData(SamplingData):
         minute_durations = [round(duration / 60) for duration in second_durations]
         self.durations_sampling_data = ContinuousSamplingData(minute_durations)
 
+    def compute_samples(self, size: int = 100, *args, **kwargs):
+        self.start_dts_sampling_data.compute_samples(size=size)
+        self.durations_sampling_data.compute_samples(size=size)
+
     def sample(self, *args, **kwargs) -> tuple[str, str]:
         start_dt = self.start_dts_sampling_data.sample_dt()
         duration = -1
-        while duration <= 0:
+        while duration < 0:
             duration = self.durations_sampling_data.sample()
             duration = int_round(duration, n=5)  # Round to 5 minutes
 
         end_dt = start_dt + timedelta(minutes=duration)
-
         return start_dt.isoformat(), end_dt.isoformat()
 
     def display_info(self, title: str):
@@ -164,7 +209,7 @@ class DtDurationSamplingData(SamplingData):
         self.durations_sampling_data.display_info(title=f"{title} - duration")
 
 
-def to_sampling_data(values: list) -> SamplingData:
+def to_sampling_data(values: list, unique: bool = False) -> SamplingData:
     """Put the input data in the relevant SamplingData sub-class."""
     if all([isinstance(value, str) for value in values]):
         try:
@@ -202,4 +247,7 @@ def to_sampling_data(values: list) -> SamplingData:
         except ValueError:
             pass
 
-    return CategoricalSamplingData(values=values)
+    if not unique:
+        return CategoricalSamplingData(values=values)
+    else:
+        return UniqueCategoricalSamplingData(values=values)
