@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Dict
 
 from glom import PathAccessError, assign, delete, glom
 from tqdm.notebook import tqdm
@@ -12,7 +12,7 @@ def anonymize(
     resource_sampling_data: dict,
     id_suffix: str,
     verbose: bool = False,
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     """Generate synthetic data starting from `resource_bundle`, by deleting the relevant
     attributes and modifying in-place other attributes.
 
