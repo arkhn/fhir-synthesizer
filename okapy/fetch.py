@@ -1,5 +1,5 @@
 import os
-from typing import Any
+from typing import Any, Dict
 
 import requests
 from dotenv import load_dotenv
@@ -16,7 +16,7 @@ def fetch(
     resource_name: str,
     all_pages: bool = False,
     verbose: bool = False,
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     """Fetch the input data from Hapi Fhir corresponding to `resource_name` and output it in a
     bundle format.
 

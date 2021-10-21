@@ -1,3 +1,5 @@
+from typing import Dict
+
 from .metadata import PATHS_TO_SAMPLE
 from .sampling_data import SamplingData, to_sampling_data
 from .tools.utils import glom_getter
@@ -8,7 +10,7 @@ def preprocess_sampling_data(
     resource_bundle: dict,
     id_suffix: str,
     verbose: bool = False,
-) -> dict[str, SamplingData]:
+) -> Dict[str, SamplingData]:
     """Compute the relevant sampling data for the input resource bundle.
 
     Args:
@@ -25,7 +27,7 @@ def preprocess_sampling_data(
 
     resource = {"entry": resource_bundle["entry"]}
     n_entries = len(resource["entry"])
-    resource_sampling_data: dict[str, SamplingData] = {}
+    resource_sampling_data: Dict[str, SamplingData] = {}
 
     # General case
     if resource_name in PATHS_TO_SAMPLE:

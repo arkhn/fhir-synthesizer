@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
-from typing import Any
+from typing import Any, List, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -33,9 +33,9 @@ class CategoricalSamplingData(SamplingData):
     be sampled with a simple `np.random.choice` call.
     """
 
-    def __init__(self, values: list[Any]):
+    def __init__(self, values: List[Any]):
         self.values = values
-        self.samples: list[Any] = []
+        self.samples: List[Any] = []
 
     def compute_samples(self, size: int = 100, *args, **kwargs):
         samples = list(np.random.choice(self.values, size=size))
@@ -70,11 +70,11 @@ class UniqueCategoricalSamplingData(CategoricalSamplingData):
 class ContinuousSamplingData(SamplingData):
     """Continuous sampling data is data that is sampled through a probability density function."""
 
-    def __init__(self, values: list[Any]):
+    def __init__(self, values: List[Any]):
         self.values = values
         self.min_value = min(values)
         self.max_value = max(values)
-        self.samples: list[Any] = []
+        self.samples: List[Any] = []
 
         if self.min_value != self.max_value:  # General case
             self.x = np.arange(0, self.max_value)
@@ -139,7 +139,7 @@ class DtSamplingData(SamplingData):
     one for the time of the day & the other one for the date.
     """
 
-    def __init__(self, dts: list[datetime]):
+    def __init__(self, dts: List[datetime]):
         self.tz_info = dts[0].tzinfo  # Assume all the dates have the same timezone
         dates = [dt.date() for dt in dts]
         self.min_date = min(dates)
@@ -182,7 +182,7 @@ class DtDurationSamplingData(SamplingData):
     distinct continuous sampling data: one for the start date & the other one for the duration.
     """
 
-    def __init__(self, dt_pairs: list[tuple[datetime, datetime]]):
+    def __init__(self, dt_pairs: List[Tuple[datetime, datetime]]):
         start_dts = [dt_pair[0] for dt_pair in dt_pairs]
         self.start_dts_sampling_data = DtSamplingData(start_dts)
 
@@ -194,7 +194,7 @@ class DtDurationSamplingData(SamplingData):
         self.start_dts_sampling_data.compute_samples(size=size)
         self.durations_sampling_data.compute_samples(size=size)
 
-    def sample(self, *args, **kwargs) -> tuple[str, str]:
+    def sample(self, *args, **kwargs) -> Tuple[str, str]:
         start_dt = self.start_dts_sampling_data.sample_dt()
         duration = -1
         while duration < 0:

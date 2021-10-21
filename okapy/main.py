@@ -1,17 +1,17 @@
 import json
 import os
 import time
-from typing import Optional
+from typing import List, Optional
 
-from .anonymize import anonymize
-from .fetch import fetch
-from .metadata import RESOURCE_NAMES
-from .preprocess import preprocess_sampling_data
-from .tools.paths import DATA_PATH
+from okapy.anonymize import anonymize
+from okapy.fetch import fetch
+from okapy.metadata import RESOURCE_NAMES
+from okapy.preprocess import preprocess_sampling_data
+from okapy.tools.paths import DATA_PATH
 
 
 def anonymization_pipeline(
-    resource_names: list[str] = RESOURCE_NAMES,
+    resource_names: List[str] = RESOURCE_NAMES,
     id_suffix: str = "",
     all_pages: bool = True,
     verbose: bool = False,
