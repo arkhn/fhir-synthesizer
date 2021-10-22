@@ -49,7 +49,10 @@ class CategoricalSamplingData(SamplingData):
             return self.samples.pop()
 
     def display_info(self, title: str):
-        print(f"{title} ({len(self.values)}): {set([str(value) for value in self.values][:5])}")
+        plt.hist([str(value) for value in self.values])
+        plt.xticks([])
+        plt.title(title)
+        plt.show()
 
 
 class UniqueCategoricalSamplingData(CategoricalSamplingData):
@@ -64,21 +67,24 @@ class UniqueCategoricalSamplingData(CategoricalSamplingData):
         return list(np.random.choice(self.values, size=size, replace=False))
 
     def display_info(self, title: str):
-        print(f"{title} ({len(self.values)}): {set([str(value) for value in self.values][:5])}")
+        plt.hist([str(value) for value in self.values])
+        plt.xticks([])
+        plt.title(title)
+        plt.show()
 
 
 class ContinuousSamplingData(SamplingData):
     """Continuous sampling data is data that is sampled through a probability density function."""
 
     def __init__(self, values: List[Any]):
-        self.values = values
+        self.values = scipy.stats.trimboth(values, proportiontocut=0.03)  # Remove outliers
         self.min_value = min(values)
         self.max_value = max(values)
         self.samples: List[Any] = []
 
         if self.min_value != self.max_value:  # General case
             self.x = np.arange(0, self.max_value)
-            dist = scipy.stats.gamma
+            dist = scipy.stats.norm
             params = dist.fit(self.values)
             arg = params[:-2]
             loc = params[-2]
@@ -130,7 +136,15 @@ class ContinuousSamplingData(SamplingData):
             plt.title(title)
             plt.show()
         else:  # Case where there is only one value
-            print(f"{title}: distribution with single value '{self.values[0]}'")
+            fig, ax1 = plt.subplots()
+            color1 = "tab:blue"
+            ax1.hist(self.values, color=color1)
+            ax1.set_ylabel("count", color=color1)
+            ax1.tick_params(axis="y", labelcolor=color1)
+            ax1.set_ylim(bottom=0)
+
+            plt.title(title)
+            plt.show()
 
 
 class DtSamplingData(SamplingData):
@@ -244,6 +258,16 @@ def to_sampling_data(values: list, unique: bool = False) -> SamplingData:
                 for value in values
             ]
             return DtDurationSamplingData(dt_pairs=dt_pairs)
+        except ValueError:
+            pass
+
+    elif all(
+        [(isinstance(value, dict) and "start" in value and len(value) == 1) for value in values]
+    ):
+        try:
+            # Values has a format like {"start": '2016-11-21T14:45:00+02:00'}
+            dts = [datetime.fromisoformat(value["start"]) for value in values]
+            return DtSamplingData(dts=dts)
         except ValueError:
             pass
 
