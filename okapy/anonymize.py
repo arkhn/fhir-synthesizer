@@ -83,4 +83,20 @@ def anonymize(
             assign(resource, f"entry.{i}.resource.start", fake_start)
             assign(resource, f"entry.{i}.resource.end", fake_end)
 
-    return resource
+    # Re-organize the final bundle with the desired information
+    entries = [{"resource": entry["resource"]} for entry in resource["entry"]]
+    for entry in entries:
+        entry["request"] = {
+            "method": "PUT",
+            "url": f"{entry['resource']['resourceType']}/{entry['resource']['id']}",
+        }
+    resource_bundle["entry"] = entries
+
+    final_keys = ["resource_bundle", "entry"]
+    final_resource_bundle = {
+        key: value for key, value in resource_bundle.items() if key in final_keys
+    }
+    final_resource_bundle["type"] = "transaction"
+    final_resource_bundle["resourceType"] = "Bundle"
+
+    return final_resource_bundle
