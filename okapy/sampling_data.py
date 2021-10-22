@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
-from typing import Any, List, Tuple
+from typing import Any, Dict, List, Tuple, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -153,7 +153,8 @@ class DtSamplingData(SamplingData):
     one for the time of the day & the other one for the date.
     """
 
-    def __init__(self, dts: List[datetime]):
+    def __init__(self, dts: List[datetime], mode: str):
+        self.mode = mode
         self.tz_info = dts[0].tzinfo  # Assume all the dates have the same timezone
         dates = [dt.date() for dt in dts]
         self.min_date = min(dates)
@@ -181,9 +182,16 @@ class DtSamplingData(SamplingData):
         dt = min_dt + timedelta(days=day, minutes=minute)
         return dt
 
-    def sample(self, *args, **kwargs) -> str:
+    def sample(self, *args, **kwargs) -> Union[str, Dict[str, str]]:
         dt = self.sample_dt()
-        return dt.isoformat()  # Output has format '2016-12-05T14:40:00+02:00'
+        dt_str = dt.isoformat()
+
+        if self.mode == "str":
+            return dt_str  # Output has format '2016-12-05T14:40:00+02:00'
+        elif self.mode == "dict":
+            return {"start": dt_str}  # Output has format {"start": '2016-12-05T14:40:00+02:00'}
+        else:
+            raise ValueError("Invalid mode provided.")
 
     def display_info(self, title: str):
         self.days_sampling_data.display_info(title=f"{title} - days")
@@ -196,9 +204,10 @@ class DtDurationSamplingData(SamplingData):
     distinct continuous sampling data: one for the start date & the other one for the duration.
     """
 
-    def __init__(self, dt_pairs: List[Tuple[datetime, datetime]]):
+    def __init__(self, dt_pairs: List[Tuple[datetime, datetime]], mode: str):
+        self.mode = mode
         start_dts = [dt_pair[0] for dt_pair in dt_pairs]
-        self.start_dts_sampling_data = DtSamplingData(start_dts)
+        self.start_dts_sampling_data = DtSamplingData(start_dts, mode="str")
 
         second_durations = [(dt_pair[1] - dt_pair[0]).total_seconds() for dt_pair in dt_pairs]
         minute_durations = [round(duration / 60) for duration in second_durations]
@@ -208,7 +217,7 @@ class DtDurationSamplingData(SamplingData):
         self.start_dts_sampling_data.compute_samples(size=size)
         self.durations_sampling_data.compute_samples(size=size)
 
-    def sample(self, *args, **kwargs) -> Tuple[str, str]:
+    def sample(self, *args, **kwargs) -> Union[Tuple[str, str], Dict[str, str]]:
         start_dt = self.start_dts_sampling_data.sample_dt()
         duration = -1
         while duration < 0:
@@ -216,7 +225,13 @@ class DtDurationSamplingData(SamplingData):
             duration = int_round(duration, n=5)  # Round to 5 minutes
 
         end_dt = start_dt + timedelta(minutes=duration)
-        return start_dt.isoformat(), end_dt.isoformat()
+
+        if self.mode == "tuple":
+            return start_dt.isoformat(), end_dt.isoformat()
+        elif self.mode == "dict":
+            return {"start": start_dt.isoformat(), "end": end_dt.isoformat()}
+        else:
+            raise ValueError("Invalid mode provided.")
 
     def display_info(self, title: str):
         self.start_dts_sampling_data.display_info(title=f"{title} - start")
@@ -229,7 +244,7 @@ def to_sampling_data(values: list, unique: bool = False) -> SamplingData:
         try:
             # Values has a format like '2016-11-21T14:45:00+02:00'
             dts = [datetime.fromisoformat(value) for value in values]
-            return DtSamplingData(dts=dts)
+            return DtSamplingData(dts=dts, mode="str")
         except ValueError:
             pass
 
@@ -240,7 +255,7 @@ def to_sampling_data(values: list, unique: bool = False) -> SamplingData:
                 (datetime.fromisoformat(start_dt), datetime.fromisoformat(end_dt))
                 for start_dt, end_dt in values
             ]
-            return DtDurationSamplingData(dt_pairs=dt_pairs)
+            return DtDurationSamplingData(dt_pairs=dt_pairs, mode="tuple")
         except ValueError:
             pass
 
@@ -257,7 +272,7 @@ def to_sampling_data(values: list, unique: bool = False) -> SamplingData:
                 (datetime.fromisoformat(value["start"]), datetime.fromisoformat(value["end"]))
                 for value in values
             ]
-            return DtDurationSamplingData(dt_pairs=dt_pairs)
+            return DtDurationSamplingData(dt_pairs=dt_pairs, mode="dict")
         except ValueError:
             pass
 
@@ -267,7 +282,7 @@ def to_sampling_data(values: list, unique: bool = False) -> SamplingData:
         try:
             # Values has a format like {"start": '2016-11-21T14:45:00+02:00'}
             dts = [datetime.fromisoformat(value["start"]) for value in values]
-            return DtSamplingData(dts=dts)
+            return DtSamplingData(dts=dts, mode="dict")
         except ValueError:
             pass
 
