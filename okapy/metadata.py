@@ -142,6 +142,7 @@ PATHS_DEFAULT_VALUE = {
     "consultations_specialisees": [
         META,
         ("entry.{}.resource.reasonCode", "DEFAULT REASONCODE"),
+        ("entry.{}.resource.type.text", "DESCRIPTION DU RDV"),
     ],
     "consultations_pedicure": [
         META,
