@@ -1,0 +1,42 @@
+name: Triage
+
+on:
+  issues:
+    types:
+      - opened
+      - reopened
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - ready_for_review
+
+jobs:
+  assign_project:
+    runs-on: ubuntu-latest
+    name: Assign a project
+
+    steps:
+      - name: Assign a project to an issue
+        uses: alex-page/github-project-automation-plus@v0.7.1
+        if: ${{ github.event_name == 'issues' }}
+        with:
+          project: Team data
+          column: Awaiting triage
+          repo-token: ${{ secrets.DOKTEUR_ACCESS_TOKEN }}
+
+      - name: Assign a project to a draft PR
+        uses: alex-page/github-project-automation-plus@v0.7.1
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == true }}
+        with:
+          project: Team data
+          column: Work in progress
+          repo-token: ${{ secrets.DOKTEUR_ACCESS_TOKEN }}
+
+      - name: Assign a project to a PR
+        uses: alex-page/github-project-automation-plus@v0.7.1
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false }}
+        with:
+          project: Team data
+          column: Awaiting review
+          repo-token: ${{ secrets.DOKTEUR_ACCESS_TOKEN }}
