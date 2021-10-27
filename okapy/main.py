@@ -3,6 +3,8 @@ import os
 import time
 from typing import List, Optional
 
+import typer
+
 from okapy.anonymize import anonymize
 from okapy.fetch import fetch
 from okapy.metadata import RESOURCE_NAMES
@@ -66,4 +68,4 @@ def anonymization_pipeline(
 
 
 if __name__ == "__main__":
-    anonymization_pipeline()
+    typer.run(anonymization_pipeline)
