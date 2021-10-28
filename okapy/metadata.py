@@ -152,10 +152,13 @@ PATHS_DEFAULT_VALUE = {
     "vacances": [META],
     "consultations_specialisees": [
         META,
-        ("entry.{}.resource.reasonCode", [{"text": "DEFAULT REASONCODE"}]),
-        ("entry.{}.resource.type", [{"text": "DESCRIPTION DU RDV"}]),
+        ("entry.{}.resource.reasonCode", "DEFAULT REASONCODE"),
+        ("entry.{}.resource.type.text", "DESCRIPTION DU RDV"),
     ],
-    # "consultations_pedicure": [META],
+    # "consultations_pedicure": [
+    #     META,
+    #     ("entry.{}.resource.reasonCode", "DEFAULT REASONCODE"),
+    # ],
     "practitioner": [META],
 }
 
