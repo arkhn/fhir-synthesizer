@@ -2,7 +2,7 @@ from glom import Coalesce
 
 META = (
     "entry.{}.resource.meta",
-    [{"system": "http://terminology.arkhn.org/Synthetic", "code": "gen-1"}],
+    {"tag": [{"system": "http://terminology.arkhn.org/Synthetic", "code": "gen-1"}]},
 )
 
 ID = "entry.{}.resource.id"

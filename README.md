@@ -8,3 +8,15 @@ To fetch the data from a Fhir API, an environment variable `HAPI_FHIR_URL` must 
 instance using a `.env` files, similar to the file `.env.example`.
 
 All the algorithms are detailed in `okapy/okapy`.
+
+## Install the requirements
+
+```
+pip install -e .
+```
+
+## Launch okapy
+
+```
+python okapy/main.py
+```
