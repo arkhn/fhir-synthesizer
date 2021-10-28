@@ -63,6 +63,19 @@ def anonymize(
         if resource_name in PATHS_TO_SAMPLE:
             for path, sampling_data in resource_sampling_data.items():
                 new_value = sampling_data.sample()
+
+                # Unflatten the data which has been flatten previously
+                n_flattens = set(
+                    n_flatten
+                    for path_temp, _, n_flatten in PATHS_TO_SAMPLE[resource_name]
+                    if path == path_temp
+                )
+                if len(n_flattens) != 1:
+                    raise ValueError("Not able to retrieve a unique `n_flatten`.")
+                n_flatten = n_flattens.pop()
+                for _ in range(n_flatten):
+                    new_value = [new_value]
+
                 assign(resource, path.format(i), new_value)
 
         # Set default values

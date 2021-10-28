@@ -135,20 +135,17 @@ PATHS_DEFAULT_VALUE = {
     "chambres": [META],
     "patients_actifs": [META],
     "activites_planifiees": [META],
-    "soins_planifies": [META, ("entry.{}.resource.note", "DEFAULT NOTE")],
+    "soins_planifies": [META, ("entry.{}.resource.note", [{"text": "DEFAULT NOTE"}])],
     "hospitalisations": [META],
     "sejours": [META],
     "vacances": [META],
     "consultations_specialisees": [
         META,
-        ("entry.{}.resource.reasonCode", "DEFAULT REASONCODE"),
-        ("entry.{}.resource.type.text", "DESCRIPTION DU RDV"),
+        ("entry.{}.resource.reasonCode", [{"text": "DEFAULT REASONCODE"}]),
+        ("entry.{}.resource.type", [{"text": "DESCRIPTION DU RDV"}]),
     ],
-    # "consultations_pedicure": [
-    #     META,
-    #     ("entry.{}.resource.reasonCode", "DEFAULT REASONCODE"),
-    # ],
-    "practitioner": [META]
+    # "consultations_pedicure": [META],
+    "practitioner": [META],
 }
 
 # Attributes that are ids or refs to which we must add a suffix
