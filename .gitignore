@@ -1,12 +1,9 @@
 ### Custom .gitignore ###
-# MAC stuff
-.DS_Store
+# Data stuff
+data/
 
 # Pycharm stuff
 .idea/
-
-# Data stuff
-data/
 
 ### GitHub's .gitignore Python template ###
 # Byte-compiled / optimized / DLL files

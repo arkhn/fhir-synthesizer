@@ -1,15 +1,13 @@
 import os
 from typing import Any, Dict
 
-import requests
+import requests  # type: ignore
 from dotenv import load_dotenv
 
 from .metadata import REQUESTS
 
 load_dotenv()  # Take environment variables from .env
 hapi_fhir_url = os.getenv("HAPI_FHIR_URL")
-if hapi_fhir_url is None:
-    raise ValueError("Missing environment variable for 'HAPI_FHIR_URL'.")
 
 
 def fetch(
@@ -31,6 +29,9 @@ def fetch(
     """
     if verbose:
         print("Fetching...")
+
+    if hapi_fhir_url is None:
+        raise ValueError("Missing environment variable for 'HAPI_FHIR_URL'.")
 
     request = REQUESTS[resource_name]
 

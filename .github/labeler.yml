@@ -1,0 +1,5 @@
+# This file defines GitHub labels to assign to PRs, based on the path of the files that are been
+# updated in the PR. Entries must have the following format:
+# label:
+# - "path/to/folder/**"
+# - "other/path/to/folder/**"

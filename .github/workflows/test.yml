@@ -1,0 +1,53 @@
+# This workflow runs the testing of the package using pytest, computes the test coverage, and
+# comments the coverage results on GitHub.
+
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - ready_for_review
+      - synchronize
+
+jobs:
+  test:
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.draft == false }}
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Test with pytest
+        run: |
+          pytest --cov=okapy/ --cov-report term-missing:skip-covered --junitxml=pytest.xml . > pytest-coverage.txt
+
+      - name: Display Pytest's output
+        if: ${{ always() }}
+        run: |
+          cat pytest-coverage.txt
+
+      - name: Comment the coverage
+        uses: MishaKav/pytest-coverage-comment@v1.1.11
+        with:
+          pytest-coverage-path: pytest-coverage.txt
+          junitxml-path: pytest.xml
