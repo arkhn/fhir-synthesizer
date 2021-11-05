@@ -1,9 +1,12 @@
-### Custom .gitignore ###
+### Custom .prettierignore ###
 # Data stuff
 data/
 
 # Pycharm stuff
 .idea/
+
+# Models
+models/
 
 ### GitHub's .gitignore Python template ###
 # Byte-compiled / optimized / DLL files
