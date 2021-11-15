@@ -19,6 +19,7 @@ repos:
       - id: detect-private-key # Detect the presence of private keys
       - id: end-of-file-fixer # Ensures that files end with a newline
       - id: name-tests-test # Verify that test files are named correctly
+      - id: requirements-txt-fixer # Sort the entries in requirements.txt files
 
   # Black is used to format the code in Python
   - repo: https://github.com/psf/black
