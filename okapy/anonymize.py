@@ -1,9 +1,13 @@
+import random
 from typing import Any, Dict
 
+from faker import Faker
 from glom import PathAccessError, assign, delete, glom
 from tqdm.notebook import tqdm
 
 from okapy.metadata import PATHS_DEFAULT_VALUE, PATHS_ID_REF, PATHS_TO_DELETE, PATHS_TO_SAMPLE
+
+fake = Faker("fr_FR")
 
 
 def anonymize(
@@ -95,6 +99,22 @@ def anonymize(
             fake_start, fake_end = starts_ends.sample()
             assign(resource, f"entry.{i}.resource.start", fake_start)
             assign(resource, f"entry.{i}.resource.end", fake_end)
+
+        # Sample a random name for persons (patients or practitioners)
+        if resource_name in {"patients_actifs", "practitioner"}:
+            gender = random.choice(["f", "m"])  # nosec
+            n_given_names = random.choices([1, 2, 3], weights=[7, 2, 1], k=1)[0]  # nosec
+            family = fake.last_name().upper()
+            if gender == "f":
+                given = [fake.first_name_female() for _ in range(n_given_names)]
+                prefix = random.choice(["Melle", "Mme"])  # nosec
+            else:
+                given = [fake.first_name_male() for _ in range(n_given_names)]
+                prefix = "M."
+            text = f"{prefix} {family} {', '.join(given)}"
+
+            name = [{"text": text, "family": family, "given": given}]
+            assign(resource, f"entry.{i}.resource.name", name)
 
     # Re-organize the final bundle with the desired information
     entries = [{"resource": entry["resource"]} for entry in resource["entry"]]
