@@ -123,7 +123,7 @@ PATHS_TO_SAMPLE = {
 PATHS_TO_DELETE = {
     "patients_actifs": [
         "entry.{}.resource.birthDate",
-        "entry.{}.resource.name",
+        # "entry.{}.resource.name",  # We will sample fake names instead
         "entry.{}.resource.text",
         "entry.{}.resource.identifier",
     ],
@@ -131,7 +131,7 @@ PATHS_TO_DELETE = {
     "vacances": ["entry.{}.resource.type"],
     "consultations_pedicure": ["entry.{}.resource.name", "entry.{}.resource.identifier"],
     "practitioner": [
-        "entry.{}.resource.name",
+        # "entry.{}.resource.name",  # We will sample fake names instead
         "entry.{}.resource.identifier",
     ],
 }
