@@ -1,3 +1,4 @@
+Faker==9.8.1
 glom==20.11.0
 ipywidgets==7.6.5
 matplotlib==3.4.3
@@ -6,10 +7,9 @@ numpy==1.21.2
 pandas==1.3.3
 pytest==6.2.5
 pytest-cov==3.0.0
+pytest-mock==3.6.1
 python-dotenv==0.19.1
 requests==2.26.0
 scipy==1.7.1
 tqdm==4.62.3
 typer==0.4.0
-Faker==9.8.1
-pytest-mock==3.6.1
