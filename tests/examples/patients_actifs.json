@@ -1,0 +1,166 @@
+{
+  "resourceType": "Bundle",
+  "id": "12345",
+  "meta": { "lastUpdated": "2000-01-01T00:00:00.000+00:00" },
+  "type": "searchset",
+  "total": 3,
+  "link": [
+    {
+      "relation": "self",
+      "url": "http://XX.XXX.X.XX/hapi/fhir/stuff_1"
+    },
+    {
+      "relation": "next",
+      "url": "http://XX.XXX.X.XX/hapi/fhir?stuff_2"
+    }
+  ],
+  "entry": [
+    {
+      "fullUrl": "http://XX.XXX.X.XX/hapi/fhir/Patient/23456",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "23456",
+        "meta": {
+          "versionId": "1",
+          "lastUpdated": "2000-01-01T00:00:00.000+00:00",
+          "tag": [
+            {
+              "system": "http://terminology.arkhn.org/CodeSystem/source",
+              "code": "abc"
+            },
+            {
+              "system": "http://terminology.arkhn.org/CodeSystem/resource",
+              "code": "bcd"
+            }
+          ]
+        },
+        "text": {
+          "status": "generated",
+          "div": "Name and various information."
+        },
+        "identifier": [
+          {
+            "system": "http://terminology.arkhn.org/56789",
+            "value": "A"
+          }
+        ],
+        "active": true,
+        "name": [
+          {
+            "text": "M./Mme/Melle LASTNAME first name(s)",
+            "family": "LASTNAME",
+            "given": ["first name"]
+          }
+        ],
+        "birthDate": "2000-01-01",
+        "managingOrganization": {
+          "reference": "Organization/67890",
+          "type": "Organization",
+          "identifier": {
+            "system": "http://terminology.arkhn.org/7890",
+            "value": "cde"
+          }
+        }
+      },
+      "search": { "mode": "match" }
+    },
+    {
+      "fullUrl": "http://XX.XXX.X.XX/hapi/fhir/Patient/34567",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "34567",
+        "meta": {
+          "versionId": "1",
+          "lastUpdated": "2000-01-01T00:00:00.000+00:00",
+          "tag": [
+            {
+              "system": "http://terminology.arkhn.org/CodeSystem/source",
+              "code": "abc"
+            },
+            {
+              "system": "http://terminology.arkhn.org/CodeSystem/resource",
+              "code": "bcd"
+            }
+          ]
+        },
+        "text": {
+          "status": "generated",
+          "div": "Name and various information."
+        },
+        "identifier": [
+          {
+            "system": "http://terminology.arkhn.org/56789",
+            "value": "B"
+          }
+        ],
+        "active": true,
+        "name": [
+          {
+            "text": "M./Mme/Melle LASTNAME first name(s)",
+            "family": "LASTNAME",
+            "given": ["first name"]
+          }
+        ],
+        "birthDate": "2000-01-01",
+        "managingOrganization": {
+          "reference": "Organization/67890",
+          "type": "Organization",
+          "identifier": {
+            "system": "http://terminology.arkhn.org/7890",
+            "value": "cde"
+          }
+        }
+      },
+      "search": { "mode": "match" }
+    },
+    {
+      "fullUrl": "http://XX.XXX.X.XX/hapi/fhir/Patient/45678",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "45678",
+        "meta": {
+          "versionId": "1",
+          "lastUpdated": "2000-01-01T00:00:00.000+00:00",
+          "tag": [
+            {
+              "system": "http://terminology.arkhn.org/CodeSystem/source",
+              "code": "abc"
+            },
+            {
+              "system": "http://terminology.arkhn.org/CodeSystem/resource",
+              "code": "bcd"
+            }
+          ]
+        },
+        "text": {
+          "status": "generated",
+          "div": "Name and various information."
+        },
+        "identifier": [
+          {
+            "system": "http://terminology.arkhn.org/56789",
+            "value": "C"
+          }
+        ],
+        "active": true,
+        "name": [
+          {
+            "text": "M./Mme/Melle LASTNAME first name(s)",
+            "family": "LASTNAME",
+            "given": ["first name"]
+          }
+        ],
+        "birthDate": "2000-01-01",
+        "managingOrganization": {
+          "reference": "Organization/67890",
+          "type": "Organization",
+          "identifier": {
+            "system": "http://terminology.arkhn.org/7890",
+            "value": "cde"
+          }
+        }
+      },
+      "search": { "mode": "match" }
+    }
+  ]
+}
