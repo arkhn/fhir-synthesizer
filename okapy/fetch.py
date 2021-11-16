@@ -3,11 +3,14 @@ from typing import Any, Dict
 
 import requests  # type: ignore
 from dotenv import load_dotenv
+from requests.models import HTTPBasicAuth
 
 from .metadata import REQUESTS
 
 load_dotenv()  # Take environment variables from .env
 hapi_fhir_url = os.getenv("HAPI_FHIR_URL")
+hapi_fhir_user = os.getenv("HAPI_FHIR_USER")
+hapi_fhir_pwd = os.getenv("HAPI_FHIR_PWD")
 
 
 def fetch(
@@ -36,7 +39,11 @@ def fetch(
     request = REQUESTS[resource_name]
 
     # A connection to the server is needed to access the data
-    r = requests.get(f"{hapi_fhir_url}/{request}_format=json")
+    r = requests.get(
+        f"{hapi_fhir_url}/{request}_format=json", auth=HTTPBasicAuth(hapi_fhir_user, hapi_fhir_pwd)
+    )
+
+    print(request)
     resource_bundle = r.json()
 
     if not all_pages:
