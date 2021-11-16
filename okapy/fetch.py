@@ -3,7 +3,7 @@ from typing import Any, Dict
 
 import requests  # type: ignore
 from dotenv import load_dotenv
-from requests.models import HTTPBasicAuth
+from requests.models import HTTPBasicAuth  # type: ignore
 
 from .metadata import REQUESTS
 
