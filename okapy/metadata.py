@@ -26,21 +26,32 @@ RESOURCE_NAMES = [
 ]
 
 REQUESTS = {
-    "ehpads": "Organization?type=C0028688&",  # Requêter tous les ehpads
-    "services": "Organization?type=C4069076&partof.identifier=140016957&",  # Requêter tous les
-    # services d'un ehpad
-    "soins": "ActivityDefinition?topic=C0011211&",  # Liste des soins
-    "animations": "ActivityDefinition?topic=C0680153&",  # Liste des animations
-    "chambres": "Location?",  # Liste des chambres
-    "patients_actifs": "Patient?active=true&",  # Liste des patients actifs
-    "activites_planifiees": "Appointment?",  # Liste des activités planifiées
-    "soins_planifies": "ServiceRequest?status=active&subject.active=true&",  # Liste des soins planifiés
-    "hospitalisations": "Encounter?class=C0019993&",  # Hospitalisations
-    "sejours": "Encounter?class=C1658399&subject.active=true&",  # Tous les séjours en EHPAD
-    "vacances": "Encounter?class=C0019843&subject.active=true&",  # Toutes les vacances planifiées
-    "consultations_specialisees": "Encounter?class=C2090905&subject.active=true&",  # Toutes les consultations
-    # spécialisées planifiées
-    # "consultations_pedicure": "Encounter?class=C0850352&subject.active=true&",  # Toutes les consultations de pédicure 0 patients qui matchent
+    # Requêter tous les ehpads
+    "ehpads": "Organization?type=C0028688&",
+    # Requêter tous les services d'un ehpad
+    "services": "Organization?type=C4069076&partof.identifier=140016957&",
+    # Liste des soins
+    "soins": "ActivityDefinition?topic=C0011211&",
+    # Liste des animations
+    "animations": "ActivityDefinition?topic=C0680153&",
+    # Liste des chambres
+    "chambres": "Location?",
+    # Liste des patients actifs
+    "patients_actifs": "Patient?active=true&",
+    # Liste des activités planifiées
+    "activites_planifiees": "Appointment?",
+    # Liste des soins planifiés
+    "soins_planifies": "ServiceRequest?status=active&subject.active=true&",
+    # Hospitalisations
+    "hospitalisations": "Encounter?class=C0019993&",
+    # Tous les séjours en EHPAD
+    "sejours": "Encounter?class=C1658399&subject.active=true&",
+    # Toutes les vacances planifiées
+    "vacances": "Encounter?class=C0019843&subject.active=true&",
+    # Toutes les consultations spécialisées planifiées
+    "consultations_specialisees": "Encounter?class=C2090905&subject.active=true&",
+    # "consultations_pedicure": (0 qui matchent = commenté)
+    # "Encounter?class=C0850352&subject.active=true&",
     "practitioner": "Practitioner?",
 }
 
