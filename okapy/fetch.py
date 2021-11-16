@@ -55,7 +55,7 @@ def fetch(
     }
     while "next" in relations.keys():
         next_url = relations["next"]
-        r = requests.get(next_url)
+        r = requests.get(next_url, auth=HTTPBasicAuth(hapi_fhir_user, hapi_fhir_pwd))
         new_result = r.json()
         resource_bundle["entry"] += new_result["entry"]
         relations = {
