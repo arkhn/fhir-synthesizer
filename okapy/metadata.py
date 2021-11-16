@@ -21,7 +21,8 @@ RESOURCE_NAMES = [
     "sejours",
     "vacances",
     "consultations_specialisees",
-    # "consultations_pedicure",
+    # "consultations_pedicure",  # No result for the corresponding request, so commented out in
+    # the following
     "practitioner",
 ]
 
@@ -50,7 +51,7 @@ REQUESTS = {
     "vacances": "Encounter?class=C0019843&subject.active=true&",
     # Toutes les consultations spécialisées planifiées
     "consultations_specialisees": "Encounter?class=C2090905&subject.active=true&",
-    # "consultations_pedicure": (0 qui matchent = commenté)
+    # Consultations de pedicure
     # "Encounter?class=C0850352&subject.active=true&",
     "practitioner": "Practitioner?",
 }

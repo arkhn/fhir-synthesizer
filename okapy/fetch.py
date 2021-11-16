@@ -40,10 +40,11 @@ def fetch(
 
     # A connection to the server is needed to access the data
     r = requests.get(
-        f"{hapi_fhir_url}/{request}_format=json", auth=HTTPBasicAuth(hapi_fhir_user, hapi_fhir_pwd)
+        f"{hapi_fhir_url}/{request}_format=json",
+        auth=HTTPBasicAuth(hapi_fhir_user, hapi_fhir_pwd),
     )
+    print(f"Using request: {request}")
 
-    print(request)
     resource_bundle = r.json()
 
     if not all_pages:
