@@ -1,57 +1,66 @@
+# This file defines all the hooks run by pre-commit.
+
+# By default, we exclude from all the hooks the models' directory, which might contain large files
+# managed with git-lfs, and the .ipynb files, which are Jupyter notebooks.
+exclude: "models/|.ipynb"
+
 repos:
+  # Base pre-commit hook repository, for simple checks & fixes
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
     hooks:
       - id: check-added-large-files # Prevent giant files from being committed
-      - id: check-ast # Check whether the files parse as valid python
-      - id: check-json # Check json files for parseable syntax
+      - id: check-ast # Check whether the files parse as valid Python
+      - id: check-json # Check JSON files for parseable syntax
       - id: check-merge-conflict # Check for files that contain merge conflict strings
-      - id: check-toml # Checks toml files for parseable syntax
-      - id: check-yaml # Check yaml files for parseable syntax
+      - id: check-toml # Checks TOML files for parseable syntax
+      - id: check-yaml # Check YAML files for parseable syntax
       - id: debug-statements # Check for debugger imports and `breakpoint()` calls in python
       - id: detect-private-key # Detect the presence of private keys
       - id: end-of-file-fixer # Ensures that files end with a newline
-        exclude: .ipynb
       - id: name-tests-test # Verify that test files are named correctly
-      - id: requirements-txt-fixer # Sort the entries in requirements.txt files
 
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v2.3.2
-    hooks:
-      - id: prettier
-        exclude: docs/
-
+  # Black is used to format the code in Python
   - repo: https://github.com/psf/black
-    rev: 21.8b0
+    rev: 21.10b0
     hooks:
       - id: black
 
-  # When adding certain files in sub-modules packages, for an unknown reason, isort's hook
-  # stopped detecting the configuration file automatically, so we have to specify it.
+  # Isort is used to re-organize our import statements in Python
   - repo: https://github.com/PyCQA/isort
-    rev: 5.9.3
+    rev: 5.10.0
     hooks:
       - id: isort
-        args: ["--settings-path", "pyproject.toml"]
 
+  # Flake8 is used to perform various code sanity checks in Python
   - repo: https://gitlab.com/PyCQA/flake8
-    rev: 3.9.2
+    rev: 4.0.1
     hooks:
       - id: flake8
 
+  # Mypy is used to check the typing hints in Python; it is quite a restrictive tool, so we don't
+  # use it in tests
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.910
+    rev: v0.910-1
     hooks:
       - id: mypy
         exclude: tests/
-        additional_dependencies: [types-requests==2.25.9] # Resolves library stubs error
 
+  # Bandit is used to check for potential security issues or vulnerabilities in Python; it's also
+  # not used in tests as it prevents the use of `assert`
   - repo: https://github.com/PyCQA/bandit
     rev: 1.7.0
     hooks:
       - id: bandit
         exclude: tests/
 
+  # Prettier is a formatting tool for many non-Python files
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.4.1
+    hooks:
+      - id: prettier
+
+  # TOML-sort is used to re-organize alphabetically TOML files (such as pyproject.toml)
   - repo: https://github.com/pappasam/toml-sort
     rev: v0.19.0
     hooks:
