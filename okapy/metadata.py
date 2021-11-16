@@ -2,7 +2,7 @@ from glom import Coalesce
 
 META = (
     "entry.{}.resource.meta",
-    {"tag": [{"system": "http://terminology.arkhn.org/Synthetic", "code": "gen-1"}]},
+    {"tag": [{"system": "http://terminology.arkhn.org/Synthetic", "code": "gen-3"}]},
 )
 
 ID = "entry.{}.resource.id"
@@ -21,26 +21,37 @@ RESOURCE_NAMES = [
     "sejours",
     "vacances",
     "consultations_specialisees",
-    "consultations_pedicure",
+    # "consultations_pedicure",
     "practitioner",
 ]
 
 REQUESTS = {
-    "ehpads": "Organization?type=C0028688&",  # Requêter tous les ehpads
-    "services": "Organization?type=C4069076&partof.identifier=140016957&",  # Requêter tous les
-    # services d'un ehpad
-    "soins": "ActivityDefinition?topic=C0011211&",  # Liste des soins
-    "animations": "ActivityDefinition?topic=C0680153&",  # Liste des animations
-    "chambres": "Location?",  # Liste des chambres
-    "patients_actifs": "Patient?active=true&",  # Liste des patients actifs
-    "activites_planifiees": "Appointment?",  # Liste des activités planifiées
-    "soins_planifies": "ServiceRequest?status=active&",  # Liste des soins planifiés
-    "hospitalisations": "Encounter?class=C0019993&",  # Hospitalisations
-    "sejours": "Encounter?class=C1658399&",  # Tous les séjours en EHPAD
-    "vacances": "Encounter?class=C0019843&",  # Toutes les vacances planifiées
-    "consultations_specialisees": "Encounter?class=C2090905&",  # Toutes les consultations
-    # spécialisées planifiées
-    "consultations_pedicure": "Encounter?class=C0850352&",  # Toutes les consultations de pédicure
+    # Requêter tous les ehpads
+    "ehpads": "Organization?type=C0028688&",
+    # Requêter tous les services d'un ehpad
+    "services": "Organization?type=C4069076&partof.identifier=140016957&",
+    # Liste des soins
+    "soins": "ActivityDefinition?topic=C0011211&",
+    # Liste des animations
+    "animations": "ActivityDefinition?topic=C0680153&",
+    # Liste des chambres
+    "chambres": "Location?",
+    # Liste des patients actifs
+    "patients_actifs": "Patient?active=true&",
+    # Liste des activités planifiées
+    "activites_planifiees": "Appointment?",
+    # Liste des soins planifiés
+    "soins_planifies": "ServiceRequest?status=active&subject.active=true&",
+    # Hospitalisations
+    "hospitalisations": "Encounter?class=C0019993&",
+    # Tous les séjours en EHPAD
+    "sejours": "Encounter?class=C1658399&subject.active=true&",
+    # Toutes les vacances planifiées
+    "vacances": "Encounter?class=C0019843&subject.active=true&",
+    # Toutes les consultations spécialisées planifiées
+    "consultations_specialisees": "Encounter?class=C2090905&subject.active=true&",
+    # "consultations_pedicure": (0 qui matchent = commenté)
+    # "Encounter?class=C0850352&subject.active=true&",
     "practitioner": "Practitioner?",
 }
 
@@ -93,18 +104,18 @@ PATHS_TO_SAMPLE = {
         ("entry.{}.resource.priority", ("entry", ["resource.priority"]), 0),
         ("entry.{}.resource.hospitalization", ("entry", ["resource.hospitalization"]), 0),
     ],
-    "consultations_pedicure": [
-        ("entry.{}.resource.status", ("entry", ["resource.status"]), 0),
-        ("entry.{}.resource.subject", ("entry", ["resource.subject"]), 0),
-        ("entry.{}.resource.period", ("entry", ["resource.period"]), 0),
-    ],
-    "practitioner": [
-        (
-            "entry.{}.resource.qualification",
-            ("entry", [Coalesce("resource.qualification", default=None)]),
-            1,
-        )
-    ],
+    # "consultations_pedicure": [
+    #     ("entry.{}.resource.status", ("entry", ["resource.status"]), 0),
+    #     ("entry.{}.resource.subject", ("entry", ["resource.subject"]), 0),
+    #     ("entry.{}.resource.period", ("entry", ["resource.period"]), 0),
+    # ],
+    # "practitioner": [
+    #     (
+    #         "entry.{}.resource.qualification",
+    #         ("entry", [Coalesce("resource.qualification", default=None)]),
+    #         1,
+    #     )
+    # ],
 }
 
 # Attributes that must be deleted
@@ -142,9 +153,12 @@ PATHS_DEFAULT_VALUE = {
     "consultations_specialisees": [
         META,
         ("entry.{}.resource.reasonCode", [{"text": "DEFAULT REASONCODE"}]),
-        ("entry.{}.resource.type", [{"text": "DESCRIPTION DU RDV"}]),
+        ("entry.{}.resource.type.text", [{"text": "DESCRIPTION DU RDV"}]),
     ],
-    "consultations_pedicure": [META],
+    # "consultations_pedicure": [
+    #     META,
+    #     ("entry.{}.resource.reasonCode", "DEFAULT REASONCODE"),
+    # ],
     "practitioner": [META],
 }
 
@@ -168,6 +182,6 @@ PATHS_ID_REF = {
     ],
     "vacances": [ID, URL, "entry.{}.resource.subject.reference"],
     "consultations_specialisees": [ID, URL, "entry.{}.resource.subject.reference"],
-    "consultations_pedicure": [ID, URL],
+    # "consultations_pedicure": [ID, URL],
     "practitioner": [ID, URL],
 }
