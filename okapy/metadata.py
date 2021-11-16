@@ -83,7 +83,6 @@ PATHS_TO_SAMPLE = {
     ],
     "sejours": [
         ("entry.{}.resource.status", ("entry", ["resource.status"]), 0),
-        ("entry.{}.resource.subject", ("entry", ["resource.subject"]), 0),
         ("entry.{}.resource.period", ("entry", ["resource.period"]), 0),
         (
             "entry.{}.resource.serviceProvider",
@@ -110,13 +109,13 @@ PATHS_TO_SAMPLE = {
     #     ("entry.{}.resource.subject", ("entry", ["resource.subject"]), 0),
     #     ("entry.{}.resource.period", ("entry", ["resource.period"]), 0),
     # ],
-    # "practitioner": [
-    #     (
-    #         "entry.{}.resource.qualification",
-    #         ("entry", [Coalesce("resource.qualification", default=None)]),
-    #         1,
-    #     )
-    # ],
+    "practitioner": [
+        (
+            "entry.{}.resource.qualification",
+            ("entry", [Coalesce("resource.qualification", default=None)]),
+            1,
+        )
+    ],
 }
 
 # Attributes that must be deleted
@@ -154,7 +153,7 @@ PATHS_DEFAULT_VALUE = {
     "consultations_specialisees": [
         META,
         ("entry.{}.resource.reasonCode", [{"text": "DEFAULT REASONCODE"}]),
-        ("entry.{}.resource.type.text", [{"text": "DESCRIPTION DU RDV"}]),
+        ("entry.{}.resource.type", [{"text": "DESCRIPTION DU RDV"}]),
     ],
     # "consultations_pedicure": [
     #     META,
