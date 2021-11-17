@@ -38,7 +38,15 @@ def preprocess_sampling_data(
                     spec=spec,
                     n_flatten=n_flatten,
                 )
-                resource_sampling_data[path] = to_sampling_data(values=values)
+
+                soins_planifies_bounds_period = (
+                    resource_name == "soins_planifies"
+                    and path == "entry.{}.resource.occurrenceTiming.repeat.boundsPeriod"
+                )
+
+                resource_sampling_data[path] = to_sampling_data(
+                    values=values, soins_planifies_bounds_period=soins_planifies_bounds_period
+                )
             else:
                 raise ValueError("Path has already been processed.")
 

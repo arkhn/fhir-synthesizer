@@ -1,5 +1,8 @@
 from glom import Coalesce
 
+# Maximum date used in the "soins_planifies" resource
+DT_INF = "2050-01-01"
+
 META = (
     "entry.{}.resource.meta",
     {"tag": [{"system": "http://terminology.arkhn.org/Synthetic", "code": "gen-3"}]},
@@ -66,10 +69,12 @@ PATHS_TO_SAMPLE = {
         # ("entry.{}.resource.end", ("entry", ["resource.end"]), 0),
     ],
     "soins_planifies": [
-        ("entry.{}.resource.code", ("entry", ["resource.code"]), 0),
         ("entry.{}.resource.subject", ("entry", ["resource.subject"]), 0),
-        ("entry.{}.resource.occurrenceTiming", ("entry", ["resource.occurrenceTiming"]), 0),
-        ("entry.{}.resource.performerType", ("entry", ["resource.performerType"]), 0),
+        (
+            "entry.{}.resource.occurrenceTiming.repeat.boundsPeriod",
+            ("entry", ["resource.occurrenceTiming.repeat.boundsPeriod"]),
+            0,
+        ),
     ],
     "hospitalisations": [
         ("entry.{}.resource.status", ("entry", ["resource.status"]), 0),
