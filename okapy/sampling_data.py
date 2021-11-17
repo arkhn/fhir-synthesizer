@@ -7,6 +7,7 @@ import numpy as np
 import scipy
 import scipy.stats
 
+from .metadata import DT_INF
 from .tools.utils import int_round
 
 
@@ -238,7 +239,48 @@ class DtDurationSamplingData(SamplingData):
         self.durations_sampling_data.display_info(title=f"{title} - duration")
 
 
-def to_sampling_data(values: list, unique: bool = False) -> SamplingData:
+class SpecialDtDurationSamplingData(SamplingData):
+    """Special datetime sampling data in the particular case of the "soins_planifies" resource."""
+
+    def __init__(self, dt_pairs: List[Tuple[datetime, Union[str, datetime]]]):
+        start_dts = []
+        start_end_dts = []
+        for start, end in dt_pairs:
+            if end == DT_INF or start == end:
+                start_dts.append(start)
+            else:
+                start_end_dts.append((start, end))
+
+        self.start_dts_sampling_data = DtSamplingData(start_dts, mode="str")
+        self.start_end_dts_sampling_data = DtDurationSamplingData(
+            dt_pairs=start_end_dts, mode="dict"  # type: ignore
+        )
+
+    def compute_samples(self, size: int = 100, *args, **kwargs):
+        self.start_dts_sampling_data.compute_samples(size=size)
+        self.start_end_dts_sampling_data.compute_samples(size=size)
+
+    def sample(self, *args, **kwargs) -> Union[Tuple[str, str], Dict[str, str]]:
+        # In the case where the end date is infinite or equal to the start date, we only sample a
+        # start date
+        if kwargs["end"] == DT_INF:
+            start_dt = self.start_dts_sampling_data.sample_dt()
+            return {"start": start_dt.isoformat(), "end": DT_INF}
+        elif kwargs["start"] == kwargs["end"]:
+            start_dt = self.start_dts_sampling_data.sample_dt()
+            return {"start": start_dt.isoformat(), "end": start_dt.isoformat()}
+        # Otherwise, we sample a duration
+        else:
+            return self.start_end_dts_sampling_data.sample()
+
+    def display_info(self, title: str):
+        self.start_dts_sampling_data.display_info(title=f"{title} - start dates only")
+        self.start_end_dts_sampling_data.display_info(title=f"{title} - start and end dates")
+
+
+def to_sampling_data(
+    values: list, unique: bool = False, soins_planifies_bounds_period: bool = False
+) -> SamplingData:
     """Put the input data in the relevant SamplingData sub-class."""
     if all([isinstance(value, str) for value in values]):
         try:
@@ -265,16 +307,26 @@ def to_sampling_data(values: list, unique: bool = False) -> SamplingData:
             for value in values
         ]
     ):
-        try:
-            # Values has a format like
-            # {"start": '2016-11-21T14:45:00+02:00', "end": '2016-11-21T15:45:00+02:00'}
-            dt_pairs = [
-                (datetime.fromisoformat(value["start"]), datetime.fromisoformat(value["end"]))
-                for value in values
-            ]
-            return DtDurationSamplingData(dt_pairs=dt_pairs, mode="dict")
-        except ValueError:
-            pass
+        if not soins_planifies_bounds_period:
+            try:
+                # Values has a format like
+                # {"start": '2016-11-21T14:45:00+02:00', "end": '2016-11-21T15:45:00+02:00'}
+                dt_pairs = [
+                    (datetime.fromisoformat(value["start"]), datetime.fromisoformat(value["end"]))
+                    for value in values
+                ]
+                return DtDurationSamplingData(dt_pairs=dt_pairs, mode="dict")
+            except ValueError:
+                pass
+        else:
+            # Special case of "soins_planifies" boundsPeriod
+            dt_pairs = []
+            for value in values:
+                start = value["start"] if value["start"][-1] != "Z" else value["start"][:-1]
+                end = value["end"] if value["end"][-1] != "Z" else value["end"][:-1]
+                dt_end = datetime.fromisoformat(end) if end != DT_INF else end
+                dt_pairs.append((datetime.fromisoformat(start), dt_end))
+            return SpecialDtDurationSamplingData(dt_pairs=dt_pairs)  # type: ignore
 
     elif all(
         [(isinstance(value, dict) and "start" in value and len(value) == 1) for value in values]

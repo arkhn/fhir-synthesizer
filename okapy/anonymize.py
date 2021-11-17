@@ -66,7 +66,15 @@ def anonymize(
         # Sample attributes that must be sampled
         if resource_name in PATHS_TO_SAMPLE:
             for path, sampling_data in resource_sampling_data.items():
-                new_value = sampling_data.sample()
+                kwargs = {}
+                if (
+                    resource_name == "soins_planifies"
+                    and path == "entry.{}.resource.occurrenceTiming.repeat.boundsPeriod"
+                ):
+                    bounds_period = glom(resource, path.format(i))
+                    kwargs = {"start": bounds_period["start"], "end": bounds_period["end"]}
+
+                new_value = sampling_data.sample(**kwargs)
 
                 # Unflatten the data which has been flatten previously
                 n_flattens = set(
