@@ -39,7 +39,7 @@ jobs:
 
       - name: Test with pytest
         run: |
-          pytest --cov=okapy/ --cov-report term-missing:skip-covered --junitxml=pytest.xml . > pytest-coverage.txt
+          pytest --cov=synthetizer/ --cov-report term-missing:skip-covered --junitxml=pytest.xml . > pytest-coverage.txt
 
       - name: Display Pytest's output
         if: ${{ always() }}

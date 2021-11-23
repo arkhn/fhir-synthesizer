@@ -5,11 +5,11 @@ from typing import List, Optional
 
 import typer
 
-from okapy.anonymize import anonymize
-from okapy.fetch import fetch
-from okapy.metadata import RESOURCE_NAMES
-from okapy.preprocess import preprocess_sampling_data
-from okapy.tools.paths import DATA_PATH
+from synthetizer.anonymize import anonymize
+from synthetizer.fetch import fetch
+from synthetizer.metadata import RESOURCE_NAMES
+from synthetizer.preprocess import preprocess_sampling_data
+from synthetizer.tools.paths import DATA_PATH
 
 
 def anonymization_pipeline(
