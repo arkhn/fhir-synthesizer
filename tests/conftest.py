@@ -3,7 +3,7 @@ import os
 
 import pytest
 
-from okapy.tools.paths import EXAMPLES_PATH, TESTS_DATA_PATH
+from synthetizer.tools.paths import EXAMPLES_PATH, TESTS_DATA_PATH
 
 
 @pytest.fixture(scope="session")

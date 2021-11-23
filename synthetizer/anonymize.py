@@ -5,7 +5,7 @@ from faker import Faker
 from glom import PathAccessError, assign, delete, glom
 from tqdm.notebook import tqdm
 
-from okapy.metadata import PATHS_DEFAULT_VALUE, PATHS_ID_REF, PATHS_TO_DELETE, PATHS_TO_SAMPLE
+from synthetizer.metadata import PATHS_DEFAULT_VALUE, PATHS_ID_REF, PATHS_TO_DELETE, PATHS_TO_SAMPLE
 
 fake = Faker("fr_FR")
 
